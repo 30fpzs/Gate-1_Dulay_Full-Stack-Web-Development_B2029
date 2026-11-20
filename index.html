@@ -4,10 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gate G1 — Sari-sari Cart Calculator (STARTER)</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+  <link rel="stylesheet" href="gate1-dulay.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.4/css/bulma.min.css">
 </head>
 <body>
-  <section class="section">
+  
     <div class="container" style="max-width: 640px;">
       <h1 class="title is-4">🛒 Sari-sari Cart Calculator</h1>
       <p class="subtitle is-6">
@@ -23,9 +24,10 @@
       </div>
 
       <!-- TODO (reuse G0): your receipt will render inside here -->
-      <div id="receipt" class="box content"></div>
-    </div>
-  </section>
+      <div id="receipt" class="box"></div>
+      </div>
+  
+  
 
   <script>
     // ============================================================
@@ -46,8 +48,16 @@
     // Hint: declare  let total = 0;  loop over items with a for..of;
     //       add  total += item.price * item.qty;  then  return total;
     // ============================================================
-    function computeSubtotal(items) {
+    function computeSubtotal(items) 
+    {
       // YOUR CODE HERE
+
+      let total = 0;
+      for(const item of items)
+      {
+        total += item.price * item.qty;
+      }
+      return total;
     }
 
     // ============================================================
@@ -56,8 +66,24 @@
     // Otherwise return the total unchanged.
     // Hint: use an if / else.  Discounted = total * 0.9.
     // ============================================================
-    function applyDiscount(total) {
+    function applyDiscount(total) 
+    {
       // YOUR CODE HERE
+
+      if(total > 500)
+      {
+        return total * 0.9;
+      }
+      else
+      {
+        return total;
+      }
+    }
+
+    function updateItems(index, newQty)
+    {
+      items[index].qty = Number(newQty) || 0;
+      printReceipt(items);
     }
 
     // ============================================================
@@ -68,7 +94,8 @@
     //    (reuse your Gate G0 page-rendering skill).
     //  - Use the two functions above; do NOT recompute by hand.
     // ============================================================
-    function printReceipt(items) {
+    function printReceipt(items) 
+    {
       const subtotal = computeSubtotal(items);
       const finalTotal = applyDiscount(subtotal);
 
@@ -79,7 +106,20 @@
       //   html += '</ul>';
       //   html += `<p><strong>TOTAL: ...</strong></p>`;
       //   document.getElementById('receipt').innerHTML = html;
-    }
+
+      let html = '<ul>';
+      for(const item of items)
+      {
+        const itemTotal = item.price * item.qty;
+        console.log(`${item.name} x${item.qty} = ${itemTotal}`);
+        html += `<li>${item.name} x${item.qty} = ${itemTotal}</li>`;
+      }
+      html += '</ul>';
+      console.log(`FINAL TOTAL: ${finalTotal}`);
+      html += `<p>Subtotal: ₱${subtotal.toFixed(2)}</p>`;
+      html += `<p class="title is-5"><strong>FINAL TOTAL: ₱${finalTotal.toFixed(2)}</strong></p>`;
+      document.getElementById('receipt').innerHTML = html;
+      }
 
     // ============================================================
     // RUN IT (given)
